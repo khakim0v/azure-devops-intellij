@@ -102,7 +102,7 @@ configure(mainProjects + clientProjects) {
     }
 }
 
-def reactiveBackend = file("client/backend/build/install")
+def reactiveBackend = file("client/backend/build/install/backend")
 
 /**
  * specific settings for each project
@@ -156,15 +156,18 @@ project(":plugin") {
             }
         }
 
-        // Custom sandbox tasks for reactive backend
-        tasks.register('prepareBackendSandbox', Copy) {
+        tasks.named('prepareSandbox', org.jetbrains.intellij.platform.gradle.tasks.PrepareSandboxTask) {
             dependsOn ":client:backend:installDist"
-            from reactiveBackend
-            into layout.buildDirectory.dir("idea-sandbox/plugins/${project.name}")
+            from(reactiveBackend) {
+                into("backend")
+            }
         }
-        
-        tasks.named('prepareSandbox') {
-            finalizedBy('prepareBackendSandbox')
+
+        tasks.named('buildPlugin', org.jetbrains.intellij.platform.gradle.tasks.BuildPluginTask) {
+            dependsOn ":client:backend:installDist"
+            from(reactiveBackend) {
+                into("backend")
+            }
         }
     }
 
