@@ -3,6 +3,7 @@
 
 package com.microsoft.alm.plugin.context;
 
+import com.intellij.openapi.components.ServiceManager;
 import com.microsoft.alm.common.utils.ArgumentHelper;
 import com.microsoft.alm.common.utils.UrlHelper;
 import com.microsoft.alm.core.webapi.CoreHttpClient;
@@ -50,36 +51,35 @@ public class ServerContextManager {
     private final String TFS2015_NEW_SERVICE = "distributedtask";
 
     private Map<String, ServerContext> contextMap = new HashMap<String, ServerContext>();
-
-    private static class Holder {
-        private static final ServerContextManager INSTANCE = new ServerContextManager(true);
-    }
+    private boolean initialized = false;
 
     /**
-     * The constructor is protected for tests.
+     * The constructor is public for service instantiation.
      */
-    protected ServerContextManager() {
-        this(false);
-    }
-
-    private ServerContextManager(final boolean restore) {
-        if (!restore) {
-            return;
-        }
-
-        try {
-            restoreFromSavedState();
-        } catch (Throwable t) {
-            // being careful here
-            logger.error("constructor", t);
-        }
+    public ServerContextManager() {
     }
 
     public static ServerContextManager getInstance() {
-        return Holder.INSTANCE;
+        return ServiceManager.getService(ServerContextManager.class);
+    }
+
+    /**
+     * Lazy initialization - restore state on first use instead of during service construction.
+     */
+    private synchronized void ensureInitialized() {
+        if (!initialized) {
+            try {
+                restoreFromSavedState();
+            } catch (Throwable t) {
+                // being careful here
+                logger.error("ensureInitialized", t);
+            }
+            initialized = true;
+        }
     }
 
     public synchronized ServerContext getLastUsedContext() {
+        ensureInitialized();
         final ServerContext context = get(getLastUsedContextKey());
         return context;
     }
@@ -163,6 +163,7 @@ public class ServerContextManager {
     }
 
     public synchronized Collection<ServerContext> getAllServerContexts() {
+        ensureInitialized();
         //copy values from HashMap to a new List make sure the list is immutable
         return Collections.unmodifiableCollection(new ArrayList<ServerContext>(contextMap.values()));
     }

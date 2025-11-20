@@ -105,6 +105,8 @@
         <applicationService serviceInterface="com.microsoft.alm.plugin.context.RepositoryContextManager"
                             serviceImplementation="com.microsoft.alm.plugin.context.RepositoryContextManager"
                             testServiceImplementation="com.microsoft.alm.plugin.context.MockRepositoryContextManager" />
+        <applicationService serviceInterface="com.microsoft.alm.plugin.context.ServerContextManager"
+                            serviceImplementation="com.microsoft.alm.plugin.context.ServerContextManager" />
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij">
