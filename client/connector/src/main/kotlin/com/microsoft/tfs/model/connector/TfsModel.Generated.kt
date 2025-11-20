@@ -56,7 +56,7 @@ class TfsModel private constructor(
         @JvmStatic
         fun create(lifetime: Lifetime, protocol: IProtocol): TfsModel {
             return TfsModel().apply {
-                identify(protocol.identity, RdId.Null)
+                identify(protocol.identity, RdId(1))
                 bind(lifetime, protocol, "TfsModel")
             }
         }
