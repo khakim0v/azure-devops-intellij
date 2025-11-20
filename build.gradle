@@ -119,6 +119,9 @@ project(":plugin") {
     dependencies {
         implementation project(path: ":client:connector", configuration: "default")
 
+        // kotlinx-coroutines should be provided by the IDE platform (both IntelliJ and Rider bundle it)
+        compileOnly 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
+
         testImplementation group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.2'
         testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.2'
         testImplementation group: 'org.powermock', name: 'powermock-classloading-xstream', version: '2.0.2'

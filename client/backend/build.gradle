@@ -9,6 +9,7 @@ plugins {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation project("tfs-sdk")
+    // Backend runs as standalone process and needs kotlinx-coroutines
     implementation "com.jetbrains.rd:rd-framework:$rdGenVersion"
     
     // Test dependencies - needed because test files are in main sourceset
