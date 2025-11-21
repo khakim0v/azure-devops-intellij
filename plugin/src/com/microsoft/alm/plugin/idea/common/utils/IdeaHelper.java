@@ -3,6 +3,7 @@
 
 package com.microsoft.alm.plugin.idea.common.utils;
 
+import com.intellij.ide.plugins.PluginManagerCore;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ApplicationNamesInfo;
@@ -38,7 +39,7 @@ import static com.intellij.openapi.ui.Messages.getWarningIcon;
 public class IdeaHelper {
     private static final Logger logger = LoggerFactory.getLogger(IdeaHelper.class);
 
-    public static final PluginId PLUGIN_ID = PluginId.getId("com.microsoft.vso.idea");
+    public static final PluginId PLUGIN_ID = PluginManagerCore.getPluginByClassName(IdeaHelper.class.getName());
 
     private static final String CHARSET_UTF8 = "utf-8";
     public static final String TEST_RESOURCES_SUB_PATH = "/externals/platform/";
