@@ -146,7 +146,7 @@ project(":plugin") {
         buildSearchableOptions = false
         
         pluginConfiguration {
-            name = 'com.microsoft.vso.idea'
+            name = 'Azure DevOps'
         }
 
         publishing {
@@ -171,6 +171,8 @@ project(":plugin") {
             from(reactiveBackend) {
                 into("backend")
             }
+
+            archiveBaseName = 'com.microsoft.vso.idea'
         }
     }
 
