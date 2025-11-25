@@ -55,8 +55,15 @@ import java.util.stream.Collectors;
 public class TFSFileListener extends VcsVFSListener {
     public static final Logger logger = LoggerFactory.getLogger(TFSFileListener.class);
 
-    public TFSFileListener(Project project, TFSVcs vcs) {
-        super(vcs, GlobalScope.INSTANCE);
+    private TFSFileListener(@NotNull TFSVcs vcs, @NotNull CoroutineScope coroutineScope) {
+        super(vcs, coroutineScope);
+    }
+
+    @NotNull
+    public static TFSFileListener createInstance(@NotNull TFSVcs vcs, @NotNull CoroutineScope coroutineScope) {
+        TFSFileListener listener = new TFSFileListener(vcs, coroutineScope);
+        listener.installListeners();
+        return listener;
     }
 
     @NotNull

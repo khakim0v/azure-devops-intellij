@@ -55,6 +55,7 @@ import com.intellij.openapi.vcs.roots.VcsRootDetector;
 import com.intellij.openapi.vcs.update.UpdateEnvironment;
 import com.intellij.openapi.vcs.versionBrowser.ChangeBrowserSettings;
 import com.intellij.vcsUtil.VcsUtil;
+import kotlinx.coroutines.CoroutineScope;
 import com.microsoft.alm.plugin.context.RepositoryContext;
 import com.microsoft.alm.plugin.context.ServerContext;
 import com.microsoft.alm.plugin.context.ServerContextManager;
@@ -126,7 +127,8 @@ public class TFSVcs extends AbstractVcs {
 
     @Override
     public void activate() {
-        fileListener = new TFSFileListener(getProject(), this);
+        CoroutineScope activeScope = TfvcDisposable.getInstance(myProject).getCoroutineScope();
+        fileListener = TFSFileListener.createInstance(this, activeScope);
         if (tfsFileSystemListener == null) {
             tfsFileSystemListener = new TFSFileSystemListener(myProject);
         }
