@@ -11,6 +11,7 @@ import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.process.ProcessOutputTypes;
+import com.intellij.util.io.BaseOutputReader;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.diagnostic.Logger;
@@ -88,6 +89,12 @@ public class ReactiveTfvcClientHost {
                     getClientCommandLine(clientPath, connection.getPort(), logDirectory, clientHomeDir));
 
             ProcessHandler processHandler = new OSProcessHandler(commandLine) {
+                @NotNull
+                @Override
+                protected BaseOutputReader.Options readerOptions() {
+                    return BaseOutputReader.Options.forMostlySilentProcess();
+                }
+
                 @Override
                 protected void notifyProcessTerminated(int exitCode) {
                     super.notifyProcessTerminated(exitCode);
